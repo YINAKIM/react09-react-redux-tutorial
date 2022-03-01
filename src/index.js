@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {createStore} from "redux";
+import rootReducer from "./modules";
+
+const store = createStore(rootReducer); // modules/index.js에서 합친 루트리듀서로 store생성
 
 ReactDOM.render(
   <React.StrictMode>
