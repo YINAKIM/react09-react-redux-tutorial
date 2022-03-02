@@ -5,13 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createStore} from "redux";
 import rootReducer from "./modules";
+import {Provider} from "react-redux";
+import {composeWithDevTools} from "redux-devtools-extension";
 
-const store = createStore(rootReducer); // modules/index.js에서 합친 루트리듀서로 store생성
-
+const store = createStore(rootReducer, composeWithDevTools()); // modules/index.js에서 합친 루트리듀서로 store생성
+                                                               // composeWithDevTools() : 브라우저 개발자도구에서 State > 현재 리덕스 스토어 내부 상태가 보이도록 함
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 

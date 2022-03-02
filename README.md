@@ -80,3 +80,21 @@ export default counter; // counter모듈의 단 하나의 리듀서 함수
 > export : 여러개를 내보낼 수 있다.   
 > export default : 단 한개만 내보낼 수 있다.   
 
+---
+
+# Provider 컴포넌트를 사용, 프로젝트에 리덕스 적용하기
+리액트 컴포넌트에서 store를 사용할 수 있도록 `<App />` 컴포넌트를 react-redux에서 제공하는 `<Provider/>` 컴포넌트로 감싸준다.   
+`<Provider />`사용시, store를 props로 전달해주어야함
+```javascript
+import {Provider} from "react-redux";
+import {composeWithDevTools} from "redux-devtools-extension";
+
+const store = createStore(rootReducer,composeWithDevTools()); 
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+```
