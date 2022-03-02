@@ -1,3 +1,5 @@
+[react+redux 구조&연결 요약정리](https://www.notion.so/yina-note/react-redux-8ecd860ff29e4b258d57328df7c86d61)
+
 ### react-redux를 사용하여 리액트어플리케이션 상태관리하기
 >yarn add react-redux   
 
@@ -81,6 +83,8 @@ export default counter; // counter모듈의 단 하나의 리듀서 함수
 > export default : 단 한개만 내보낼 수 있다.   
 
 ---
+<br>
+<br>
 
 # Provider 컴포넌트를 사용, 프로젝트에 리덕스 적용하기
 리액트 컴포넌트에서 store를 사용할 수 있도록 `<App />` 컴포넌트를 react-redux에서 제공하는 `<Provider/>` 컴포넌트로 감싸준다.   
@@ -98,3 +102,56 @@ ReactDOM.render(
   document.getElementById('root')
 );
 ```
+
+# 컨테이너 컴포넌트 만들기, 리덕스와 연동
+### 1. 리덕스스토어에 컵근하여 원하는 상태를 받아올 수 있다.
+### 2. 액션을 디스패치해줄 수 있다. 
+
+counter모듈의 스토어와 연동된 CounterContainer 컨테이너컴포넌트의 기본 코드
+```javascript
+import Counter from "../components/Counter";
+
+const CounterContainer = () => { 
+return <Counter />;
+};
+
+export default CounterContainer;
+```
+*리덕스 스토어와 연동된 컴포넌트를 컨테이너 컴포넌트라고 부른다.
+<br>
+<br>
+
+### 3. react-redux의 connect함수 사용하여 `<CounterContainer />`를 리덕스와 연동하기
+- `connect(mapStateToProps, mapDispatchToProps)`의 형태 
+- CounterContainer를 내보낼(export) 때 사용
+```javascript
+export default connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
+```
+  * mapStateToProps(state) :    
+    - 리덕스스토어 안의 상태를 컴포넌트의 props로 넘겨주기 위해 설정   
+    - 현재 스토어가 지니고있는 state를 파라미터로 받아 >>> 변경된 state값을 return
+    - 컨테이너컴포넌트에서 호출한 connect함수에 의해 컨테이너컴포넌트의 returnJSX에서 props로 전달한다.
+    ```javascript
+    const mapStateToProps = state => ({
+        number: state.counter.number,
+    });
+    ```
+  * mapDispatchToProps(dispatch) : 
+    - 액션생성함수를 컴포넌트의 props로 넘겨주기 위해 설정
+    - store.dispatch를 파라미터로 받아 >>> **액션생성함수**를 dispatch한다.  
+    - counter.js모듈 에서(TODO2) 각 type별 액션생성함수, 각각 export했기때문에 개별 import 가능
+    ```javascript
+    import {decrease, increase} from "../modules/counter";
+    
+    const mapDispatchToProps = dispatch => ({
+          increase: () => {
+            dispatch(increase());          
+          },
+          decrease: () => {
+            dispatch(decrease());           
+          },
+    });
+    ```
+<br>
+
+### 4. App.js에서 `<CounterContainer />`를 `<Counter />`대신 렌더링한다. 
