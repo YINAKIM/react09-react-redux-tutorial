@@ -77,7 +77,7 @@ function todos(state=initialState, action) {
               )
             };
 
-        case TOGGLE:
+        case REMOVE:
             return {
               ...state,
               todos: state.todos.filter(todo => todo.id !== action.id)
