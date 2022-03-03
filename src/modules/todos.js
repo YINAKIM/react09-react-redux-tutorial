@@ -46,21 +46,18 @@ const initialState = {
 // handleActions사용시, handlers각각 액션에 필요한 추가데이터는 모두 action.payload 받아서 사용한다.
 // (state,action) 이렇게 받아와서 action.payload로 전부 쓰면 헷갈릴수있으므로 >>> (state, {payload:input}) 이런식으로 각 데이터의 이름으로 가져오면 의미파악 수월
 const todos = handleActions({
-    [CHANGE_INPUT] : (state, {payload:input}) => ( {...state, input} ),
-                  // (state, action) => ( {...state, input: action.payload} ) 같은 코드임
+    [CHANGE_INPUT] : (state, {payload:input}) => produce( state, draft => { draft.input = input } ),
 
-    [INSERT] :  (state, {payload:todo}) => ( { ...state, todos: state.todos.concat(todo) } ),
-             // (state, action) => ( { ...state, todos: state.todos.concat(action.payload) } ), 같은코드임
+    [INSERT] :  (state, {payload:todo}) => produce( state, draft => { draft.todos.push(todo) } ),
 
-    [TOGGLE] : (state, {payload:id}) => ({
-        ...state,
-        todos: state.todos.map(todo=>
-            todo.id === id ? { ...todo, done:!todo.done } : todo)
+    [TOGGLE] : (state, {payload:id}) => produce( state, draft => {
+        const todos = draft.todos.find( todo => todo.id === id );
+        todo.done = !todo.done;
     }),
 
-    [REMOVE] : (state, {payload:id}) => ({
-        ...state,
-        todos: state.todos.filter(todo => todo.id !== id)
+    [REMOVE] : (state, {payload:id}) => produce( state, draft => {
+        const index = draft.todos.findIndex(todo => todo.id !== id);
+        draft.todos.splice(index,1);
     })
 },initialState);
 export default todos;
