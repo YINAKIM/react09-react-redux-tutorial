@@ -155,3 +155,50 @@ export default connect(mapStateToProps, mapDispatchToProps)(CounterContainer);
 <br>
 
 ### 4. App.js에서 `<CounterContainer />`를 `<Counter />`대신 렌더링한다. 
+
+# 리덕스 더 편하게 사용하기 : redux-actions, immer 라이브러리 활용
+### 1. redux-actions
+> yarn add redux-actions
+- 액션생성 함수를 createAction(액션타입) 함수로 더 간결하게 작성가능
+```javascript
+// before
+export const increase = () => ({ type: INCREASE }); 
+
+// after
+import {createAction} from "redux-actions";
+export const increase = createAction(INCREASE);    
+```
+- switch문 대신 handleActions함수로 각 액션(타입)마다 업데이트 함수를 설정하는 형식으로 작성 가능
+
+```javascript
+
+// before
+function counter(state = initialState, action) {
+    switch (action.type){
+        case INCREASE :
+            return {
+                number: state.number + 1
+            };
+        case DECREASE :
+            return {
+                number: state.number - 1
+            };
+
+        default:
+            return state;
+    }
+}
+
+
+// after
+import {handleActions} from "redux-actions";
+const counter = handleActions(
+    {
+        [INCREASE]: (state,action) => ({number: state.number + 1}),
+        [DECREASE]: (state,action) => ({number: state.number - 1}),
+    }
+    ,initialState
+);
+```
+ 
+
