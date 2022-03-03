@@ -200,5 +200,25 @@ const counter = handleActions(
     ,initialState
 );
 ```
+***redux-actions의 함수 사용시, action.payload사용하기***
+- **액션생성함수에서** ) createAction(액션타입, payloadCreator)로 payload로 들어갈 데이터를 지정
+```javascript
+// createAction(액션타입, payloadCreator)으로 액션생성함수 작성
+export const changeInput = createAction(CHANGE_INPUT,input => input);
+```
+
+- **리듀서에서** ) handleActions사용시, handlers각각 액션에 필요한 추가데이터는 모두 action.payload 받아서 사용한다.
+- (state,action) 이렇게 받아와서 action.payload로 전부 쓰면 헷갈릴수있으므로 >>> (state, {payload:input}) 이런식으로 각 데이터의 이름으로 가져오면 의미파악 수월
+```javascript
+// 리듀서 함수 작성 : action.payload로 받아와서 사용
+const todos = handleActions(
+    {
+        [CHANGE_INPUT] : (state, {payload: input}) => ({...state, input}), 
+     // [CHANGE_INPUT] : (state, action) => ( {...state, input: action.payload} ) 같은 코드임
+    }
+,initialState);
+```
+
+
  
 
