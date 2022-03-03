@@ -3,6 +3,7 @@
 
 // TODO1. 액션타입 정의
 import {createAction, handleActions} from "redux-actions";
+import produce from "immer";
 
 const CHANGE_INPUT = 'todos/CHANGE_INPUT';
 const INSERT = 'todos/INSERT';
@@ -51,7 +52,7 @@ const todos = handleActions({
     [INSERT] :  (state, {payload:todo}) => produce( state, draft => { draft.todos.push(todo) } ),
 
     [TOGGLE] : (state, {payload:id}) => produce( state, draft => {
-        const todos = draft.todos.find( todo => todo.id === id );
+        const todo = draft.todos.find( todo => todo.id === id );
         todo.done = !todo.done;
     }),
 
